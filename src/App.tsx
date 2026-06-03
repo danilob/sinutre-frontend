@@ -1,7 +1,18 @@
+import { Sidebar } from '@/components/layout/Sidebar';
+import { DashboardPage } from '@/pages/DashboardPage';
+
+const DRAWER_ID = 'main-drawer';
+
 export default function App() {
   return (
-    <main className="bg-base-200 text-base-content min-h-screen grid place-items-center">
-      <h1 className="text-3xl font-semibold">Nutridash</h1>
-    </main>
+    <div className="drawer lg:drawer-open bg-base-200 text-base-content min-h-screen">
+      <input id={DRAWER_ID} type="checkbox" className="drawer-toggle" />
+
+      <div className="drawer-content flex flex-col items-center p-4 lg:p-8 w-full">
+        <DashboardPage drawerId={DRAWER_ID} />
+      </div>
+
+      <Sidebar drawerId={DRAWER_ID} />
+    </div>
   );
 }
