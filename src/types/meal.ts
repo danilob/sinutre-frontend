@@ -7,24 +7,9 @@ export interface FoodItem {
   calories: number;
 }
 
-export interface Meal {
-  id: number;
-  date: string;
-  category: MealCategory;
-  calories: number;
-  items?: FoodItem[];
-}
-
 export interface MacroSummary {
   carbs: number;
   proteins: number;
   fats: number;
   calories: number;
-  caloriesGoal: number;
-}
-
-export interface MealsSummary {
-  total: number;
-  thisMonth: number;
-  today: number;
 }
