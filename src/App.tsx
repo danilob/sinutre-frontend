@@ -1,26 +1,35 @@
 import { useState } from 'react';
-import { Sidebar } from '@/components/layout/Sidebar';
-import { DashboardPage } from '@/pages/DashboardPage';
 import { LoginPage } from '@/pages/LoginPage';
+import { AddMealModal } from '@/components/modal/AddMealModal';
+import { SAMPLE_MEAL_ITEMS } from '@/data/mockData';
 
-const DRAWER_ID = 'main-drawer';
+const EMPTY_MACROS = { carbs: 0, proteins: 0, fats: 0, calories: 0 };
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   if (!isAuthenticated) {
     return <LoginPage onLoginWithGithub={() => setIsAuthenticated(true)} />;
   }
 
   return (
-    <div className="drawer lg:drawer-open bg-base-200 text-base-content min-h-screen">
-      <input id={DRAWER_ID} type="checkbox" className="drawer-toggle" />
+    <div className="min-h-screen flex items-center justify-center bg-base-200 p-6">
+      <button
+        type="button"
+        className="btn btn-primary btn-lg"
+        onClick={() => setModalOpen(true)}
+      >
+        Adicionar refeição
+      </button>
 
-      <div className="drawer-content flex flex-col items-center p-4 lg:p-8 w-full">
-        <DashboardPage drawerId={DRAWER_ID} />
-      </div>
-
-      <Sidebar drawerId={DRAWER_ID} />
+      <AddMealModal
+        open={modalOpen}
+        macros={EMPTY_MACROS}
+        items={SAMPLE_MEAL_ITEMS}
+        onClose={() => setModalOpen(false)}
+        onSave={() => setModalOpen(false)}
+      />
     </div>
   );
 }
