@@ -8,6 +8,7 @@ import { AppLayout } from '@/layouts/AppLayout';
 import { LoginPage } from '@/pages/LoginPage';
 import { DashboardPage } from '@/pages/DashboardPage';
 import { ProtectedRoute } from './ProtectedRoute';
+import { DietFoodPage } from '@/pages/DietFood';
 
 export function Router() {
   return (
@@ -30,6 +31,13 @@ export function Router() {
             path="/"
             element={
               <DashboardPage drawerId="main-drawer" />
+            }
+          />
+
+          <Route
+            path="/foods"
+            element={
+              <DietFoodPage />
             }
           />
 
