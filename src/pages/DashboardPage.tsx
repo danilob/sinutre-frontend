@@ -6,8 +6,8 @@ import { MealFab } from '@/components/meals/MealFab';
 import { MealsList } from '@/components/meals/MealsList';
 import { MealsTable } from '@/components/meals/MealsTable';
 import { AddMealModal } from '@/components/modal/AddMealModal';
+import { useAuth } from '@/contexts/AuthContext';
 import {
-  CURRENT_USER,
   MACRO_SUMMARY,
   MEALS_SUMMARY,
   RECENT_MEALS,
@@ -27,6 +27,10 @@ const MODAL_MACROS = {
 };
 
 export function DashboardPage({ drawerId }: DashboardPageProps) {
+  const { user } = useAuth();
+
+  if (!user) return null;
+
   const modal = useMealModal();
 
   return (
@@ -34,8 +38,8 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
       <div className="flex flex-col gap-6 w-full max-w-[1200px] mx-auto mb-8">
         <Header
           drawerId={drawerId}
-          userName={CURRENT_USER.name}
-          avatarUrl={CURRENT_USER.avatarUrl}
+          userName={user.name}
+          avatarUrl={user.avatarUrl}
         />
 
         <MacroStatsBar summary={MACRO_SUMMARY} />
