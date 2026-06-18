@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 import { AddMealCard } from '@/components/cards/AddMealCard';
 import { TotalMealsCard } from '@/components/cards/TotalMealsCard';
@@ -54,6 +54,38 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
     loadMeals();
   }, []);
 
+  const mealsSummary = useMemo(() => {
+    const today = new Date();
+
+    const total = meals.length;
+
+    const todayCount = meals.filter((meal) => {
+      const date = new Date(meal.eatTime);
+
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    }).length;
+
+    const monthCount = meals.filter((meal) => {
+      const date = new Date(meal.createdAt);
+
+      return (
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    }).length;
+
+    return {
+      total,
+      thisMonth: monthCount,
+      today: todayCount,
+    };
+  }, [meals]);
+
+
   return (
     <>
       <div className="flex flex-col gap-6 w-full max-w-[1200px] mx-auto mb-8">
@@ -66,7 +98,7 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
         <MacroStatsBar summary={MACRO_SUMMARY} />
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 items-stretch">
-          <TotalMealsCard summary={MEALS_SUMMARY} />
+          <TotalMealsCard summary={mealsSummary} />
           <AddMealCard onSelectCategory={modal.openWith} />
         </div>
 
