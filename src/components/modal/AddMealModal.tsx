@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import type { FoodItem, MacroSummary } from '@/types/meal';
 import { MealItemForm } from './MealItemForm';
 import { MealItemsTable } from './MealItemsTable';
@@ -6,29 +6,25 @@ import { MealMacrosSummary } from './MealMacrosSummary';
 import { MealMetadataForm } from './MealMetadataForm';
 import { MealCategory } from '@/types/meal';
 import { MEAL_CATEGORY_BY_ID } from '@/constants/mealCategories';
+import { createMeal } from '@/services/mealService';
 
 import { MealState } from '@/types/meal';
 
 interface AddMealModalProps {
   open: boolean;
-  macros: Pick<MacroSummary, 'carbs' | 'proteins' | 'fats' | 'calories'>;
-  items: FoodItem[];
   onClose: () => void;
   onSave: () => void;
   typeMeal: MealCategory | null;
-  onRemoveItem?: (item: FoodItem) => void;
+  onMealCreated: () => Promise<void>;
 }
-
 
 
 export function AddMealModal({
   open,
-  macros,
-  items,
   typeMeal,
   onClose,
   onSave,
-  onRemoveItem,
+  onMealCreated
 }: AddMealModalProps) {
   if(!typeMeal){
     return <></>
@@ -42,6 +38,63 @@ export function AddMealModal({
     eatTime: '',
   });
 
+  const [items, setItems] = useState<FoodItem[]>([]);
+
+  function handleAddItem(
+    item: FoodItem,
+  ) {
+    setItems((current) => [
+      ...current,
+      item,
+    ]);
+  }
+
+  function handleRemoveItem(
+    item: FoodItem,
+  ) {
+    setItems((current) =>
+      current.filter(
+        (x) => x.id !== item.id,
+      ),
+    );
+  }
+
+  async function handleSaveMeal() {
+    await createMeal({
+      ...meal,
+      items: items.map((item) => ({
+        foodId: item.foodId,
+        grams: item.grams,
+      })),
+    });
+
+    await onMealCreated();
+
+    onClose();
+  }
+
+  const macros = useMemo(
+    () =>
+      items.reduce(
+        (acc, item) => {
+          acc.carbs += item.carbs;
+          acc.proteins += item.protein;
+          acc.fats += item.fat;
+          acc.calories += item.calories;
+
+          return acc;
+        },
+        {
+          carbs: 0,
+          proteins: 0,
+          fats: 0,
+          calories: 0,
+          caloriesGoal: 0,
+        },
+      ),
+    [items],
+  );
+
 
   return (
     <div className={`modal ${open ? 'modal-open' : ''}`} role="dialog">
@@ -53,16 +106,16 @@ export function AddMealModal({
 
         <div className="mb-4">
           <h3 className="text-lg font-semibold mb-4">Itens da Refeição</h3>
-          <MealItemForm />
+          <MealItemForm onAdd={handleAddItem} />
         </div>
 
-        <MealItemsTable items={items} onRemove={onRemoveItem} />
+        <MealItemsTable items={items} onRemove={handleRemoveItem} />
 
         <div className="modal-action">
           <button type="button" className="btn btn-ghost" onClick={onClose}>
             Cancelar
           </button>
-          <button type="button" className="btn btn-primary" onClick={onSave}>
+          <button type="button" className="btn btn-primary" onClick={handleSaveMeal}>
             Salvar refeição
           </button>
         </div>

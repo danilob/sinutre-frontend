@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import { AddMealCard } from '@/components/cards/AddMealCard';
 import { TotalMealsCard } from '@/components/cards/TotalMealsCard';
 import { Header } from '@/components/layout/Header';
@@ -7,6 +9,8 @@ import { MealsList } from '@/components/meals/MealsList';
 import { MealsTable } from '@/components/meals/MealsTable';
 import { AddMealModal } from '@/components/modal/AddMealModal';
 import { useAuth } from '@/context/AuthContext';
+import { Meal } from '@/types/mealSummary';
+import { api } from '@/lib/api';
 
 import {
   MACRO_SUMMARY,
@@ -34,6 +38,22 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
   }
   const modal = useMealModal();
 
+  const [meals, setMeals] = useState<Meal[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  async function loadMeals() {
+    try {
+      const response = await api.get('/meals');
+      setMeals(response.data);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadMeals();
+  }, []);
+
   return (
     <>
       <div className="flex flex-col gap-6 w-full max-w-[1200px] mx-auto mb-8">
@@ -50,19 +70,18 @@ export function DashboardPage({ drawerId }: DashboardPageProps) {
           <AddMealCard onSelectCategory={modal.openWith} />
         </div>
 
-        <MealsTable meals={[]} />
-        <MealsList meals={[]} />
+        <MealsTable meals={meals} />
+        <MealsList meals={meals} />
       </div>
 
       <MealFab onSelectCategory={modal.openWith} />
 
       <AddMealModal
         open={modal.open}
-        macros={MODAL_MACROS}
-        items={[]}
         typeMeal={modal.selectedCategory}
         onClose={modal.close}
         onSave={modal.close}
+        onMealCreated={loadMeals}
       />
     </>
   );
