@@ -1,4 +1,4 @@
-import { useState } from 'react';
+//import { useState } from 'react';
 import { NAV_ITEMS } from '@/constants/navigation';
 import { SidebarBrand } from './SidebarBrand';
 import { SidebarItem } from './SidebarItem';
@@ -8,7 +8,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({ drawerId }: SidebarProps) {
-  const [activeId, setActiveId] = useState<string>('home');
+ // const [activeId, setActiveId] = useState<string>('home');
   const expanded = true;
 
   return (

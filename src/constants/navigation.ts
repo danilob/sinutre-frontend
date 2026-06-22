@@ -1,7 +1,7 @@
 import type { Icon } from '@phosphor-icons/react';
 import {
   AppleLogo,
-  Barbell,
+  //Barbell,
   ChartLineUp,
   Gear,
   House,
@@ -11,7 +11,7 @@ export interface NavItem {
   id: string;
   label: string;
   Icon: Icon;
-  to?: string;
+  to: string;
 }
 
 export const NAV_ITEMS: readonly NavItem[] = [

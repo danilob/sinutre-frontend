@@ -4,7 +4,7 @@ import {
   Coffee,
   Hamburger,
   MoonStars,
-  DoorIcon
+  //DoorIcon
 } from '@phosphor-icons/react';
 import type { MealCategory } from '@/types/meal';
 

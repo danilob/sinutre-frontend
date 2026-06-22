@@ -28,6 +28,6 @@ export const RECENT_MEALS: Meal[] = [
 ];
 
 export const SAMPLE_MEAL_ITEMS: FoodItem[] = [
-  { id: 'rice', name: 'Arroz branco', grams: 100, calories: 130 },
-  { id: 'chicken', name: 'Peito de frango', grams: 120, calories: 198 },
+  { id: 1, foodId: 1, name: 'Arroz branco', grams: 100, calories: 130, carbs: 28, protein: 2.7, fat: 0.3 },
+  { id: 2, foodId: 2, name: 'Peito de frango', grams: 120, calories: 198, carbs: 0, protein: 31, fat: 4 },
 ];

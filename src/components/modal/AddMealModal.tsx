@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import type { FoodItem, MacroSummary } from '@/types/meal';
+import type { FoodItem } from '@/types/meal';
 import { MealItemForm } from './MealItemForm';
 import { MealItemsTable } from './MealItemsTable';
 import { MealMacrosSummary } from './MealMacrosSummary';
@@ -23,7 +23,7 @@ export function AddMealModal({
   open,
   typeMeal,
   onClose,
-  onSave,
+  //onSave,
   onMealCreated
 }: AddMealModalProps) {
   if(!typeMeal){
